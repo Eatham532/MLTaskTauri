@@ -1,0 +1,27 @@
+[project]
+name = "mltasktauri"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "eatham532" }
+]
+requires-python = ">=3.9"
+dependencies = [
+    "pytauri == 0.6.*",
+    "pydantic == 2.*",
+    "anyio == 4.*",
+    "scikit-learn" == "1.*",
+    "pandas" == "2.*",
+    "matplotlib" == "3.*",
+]
+
+[project.entry-points.pytauri]
+ext_mod = "mltasktauri.ext_mod"
+
+[build-system]
+requires = ["setuptools>=61", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages]
+find = { where = ["src-python"] }
