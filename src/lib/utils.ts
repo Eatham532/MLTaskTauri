@@ -1,6 +1,7 @@
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import {pyInvoke} from "tauri-plugin-pytauri-api";
+import {Student} from "@/lib/types.ts";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -24,4 +25,8 @@ export const setStudentMark = async (id: string|number, taskIndex: number, mark:
 
 export const generateMarkForTask = async (id: string|number, taskIndex: number): Promise<number> => {
   return await pyInvoke("generate_mark_for_task", { "student_id": Number(id), "task_id": taskIndex });
+}
+
+export const updateStudent = async (student:Student): Promise<void> => {
+  await pyInvoke("update_student", { "student": student });
 }

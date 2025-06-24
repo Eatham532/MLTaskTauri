@@ -172,18 +172,21 @@ class DB:
     def update_student(self, student: Student, save=True) -> None:
         """
         Update student record in memory and optionally persist to file.
+        If the student does not exist, add them.
 
         Args:
             student: Updated Student object
             save: Whether to save changes to CSV file
 
-        Raises:
-            ValueError: If student ID doesn't exist in database
         """
         old = next((i for i, obj in enumerate(self._objects) if obj.get_id() == student.get_id()), None)
-        self._objects[old] = deepcopy(student)
+        if old is None:
+            self._objects.append(deepcopy(student))
+        else:
+            self._objects[old] = deepcopy(student)
         self._file = pd.DataFrame(self._objects)
-        if save: self.update_df()
+        if save:
+            self.update_df()
 
     def student_exists(self, student: Student) -> bool:
         """
@@ -251,7 +254,7 @@ class DB:
             task (int): Task number
 
         Returns:
-            float: Student rank
+            int: Student rank
         """
 
         # Find the student's mark
@@ -272,3 +275,14 @@ class DB:
             sorted_marks = sorted(set(marks), reverse=True)
             rank = sorted_marks.index(student_mark) + 1
         return Ok(rank)
+
+    def get_next_id(self) -> int:
+        """
+        Generate the next available unique student ID.
+
+        Returns:
+            int: The next available student ID (max existing ID + 1, or 1 if no students exist)
+        """
+        if not self._objects:
+            return 1
+        return max(o.get_id() for o in self._objects) + 1

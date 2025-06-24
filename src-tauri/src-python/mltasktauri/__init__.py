@@ -179,4 +179,28 @@ def init_commands(_commands: Commands):
         _store.set_value(body.key, body.value)
         return b"null"
 
+    class UpdateStudentBody(BaseModel):
+        student: PYStudent
+
+    @_commands.command()
+    async def update_student(body: UpdateStudentBody) -> bytes:
+        """
+        Update a student's information in the database.
+        """
+        database = DB(get_app_store().get_value("fileLocation"))
+
+        # Generate a new ID
+        if body.student.id == -1:
+            body.student.id = database.get_next_id()
+
+        student = Student(
+            id=body.student.id,
+            name=body.student.name,
+            _class=body.student.class_id,
+            epa=body.student.epa,
+            tasks=body.student.tasks
+        )
+        database.update_student(student)
+        return b"null"
+
 init_commands(commands)

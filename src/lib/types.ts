@@ -1,9 +1,9 @@
 type Student = {
-  id: string;
+  id: number;
   name: string;
-  class_id: string;
+  class_id: number;
   epa: number;
-  tasks: String[];
+  tasks: (number|string|null)[];
 }
 
 export type { Student };

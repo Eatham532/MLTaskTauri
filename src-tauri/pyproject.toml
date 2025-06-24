@@ -11,9 +11,8 @@ dependencies = [
     "pytauri == 0.6.*",
     "pydantic == 2.*",
     "anyio == 4.*",
-    "scikit-learn" == "1.*",
-    "pandas" == "2.*",
-    "matplotlib" == "3.*",
+    "scikit-learn == 1.*",
+    "pandas == 2.*",
 ]
 
 [project.entry-points.pytauri]
@@ -25,3 +24,19 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages]
 find = { where = ["src-python"] }
+
+[tool.pyright]
+# see: <https://github.com/microsoft/pyright/blob/1.1.391/docs/configuration.md#environment-options>
+exclude = [
+    "**/node_modules",
+    "**/__pycache__",
+    # 👇 necessary, because when `tauri-cli bundles python,
+    # it will copy `pyembed` to the target directory (i.e., rust output dir).
+    "**/target",
+    # 👆
+    "**/dist",
+    "**/.venv",
+    "**/.*",
+    "src-tauri/pyembed/",
+    "src-tauri/frontend/",
+]
